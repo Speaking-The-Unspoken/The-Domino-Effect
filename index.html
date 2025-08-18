@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One push Away From Chaos - Domino Effect in Society</title>
+    <style>
+        /* --- Font Imports --- */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap');
+
+        /* --- "Old Money" Color & Typography Theme --- */
+        :root {
+            --background-cream: #fdf6e9;
+            --text-sepia: #3c362a;
+            --accent-green: #1e392a;
+            --highlight-gold: #b48a3c;
+            --border-light: #e8e0d1;
+            
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Lato', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--background-cream);
+            color: var(--text-sepia);
+            overflow-x: hidden;
+        }
+
+        /* --- Section Styling --- */
+        section, #hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 6rem 10%;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        section:last-of-type, #hero, #interlude {
+            border-bottom: none;
+        }
+
+        .content-box {
+            max-width: 800px;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        #history .content-box {
+            opacity: 1;
+            transform: none;
+        }
+
+        .content-box.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .content-box p {
+            text-align: left;
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--accent-green);
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: 5.5rem;
+            margin-bottom: 0.5rem; /* Reduced margin for subtitle */
+        }
+
+        h2 {
+            font-size: 3rem;
+        }
+
+        h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 1.15rem;
+            line-height: 1.45;
+            margin-bottom: 0.2rem;
+        }
+
+        blockquote {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            font-style: italic;
+            border-left: 4px solid var(--highlight-gold);
+            padding-left: 2rem;
+            margin: 2.5rem auto;
+            color: var(--accent-green);
+            max-width: 700px;
+        }
+
+        /* --- Hero Section --- */
+        #hero {
+            min-height: 75vh;
+        }
+        #hero h1 {
+            color: var(--accent-green);
+        }
+        #hero h3 {
+            font-family: var(--font-body); /* Use body font for subtitle */
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--text-sepia);
+            margin-bottom: 0;
+        }
+        
+        /* --- Interlude Section --- */
+        #interlude {
+            background-color: transparent;
+        }
+        .bubble {
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            max-width: 55%;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+        .bubble p {
+            margin: 0;
+            text-align: left;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+        
+        .bubble-left {
+            background: #fff;
+            border: 1px solid var(--border-light);
+            margin-right: auto;
+        }
+        
+        .bubble-right {
+            background: var(--accent-green);
+            color: #fff;
+            margin-left: auto;
+        }
+
+        /* --- History Timeline Section (Desktop) --- */
+        #history {
+            min-height: auto;
+            padding-bottom: 8rem;
+        }
+        .timeline-container {
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+            margin-top: 3rem;
+        }
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            background-color: var(--border-light);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1.5px;
+            z-index: 1;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .timeline-left { left: 0; text-align: right; }
+        .timeline-right { left: 50%; text-align: left; }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--background-cream);
+            border: 4px solid var(--accent-green);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 2;
+        }
+        .timeline-left::after { right: -10px; }
+        .timeline-right::after { left: -10px; }
+        .timeline-content {
+            padding: 20px 0;
+            position: relative;
+        }
+        .timeline-content h4 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--highlight-gold);
+            margin-bottom: 0.5rem;
+        }
+        .timeline-content p {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+        .timeline-conclusion {
+            text-align: center;
+            margin-top: 4rem;
+        }
+        .timeline-conclusion p {
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-style: italic;
+        }
+
+        /* --- Takeaway Section --- */
+        #takeaway {
+             background-color: var(--accent-green);
+             color: var(--background-cream);
+        }
+        #takeaway h2 {
+            color: #fff;
+        }
+        #takeaway blockquote {
+            color: var(--highlight-gold);
+            border: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 2.5rem 10%;
+            background-color: var(--background-cream);
+            color: #8c826d;
+            font-weight: 400;
+            border-top: 1px solid var(--border-light);
+        }
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .footer-container p {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        /* --- RESPONSIVE STYLES FOR MOBILE --- */
+        @media screen and (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            #hero h3 { font-size: 1.2rem; }
+            h2 { font-size: 2.2rem; }
+            blockquote { font-size: 1.3rem; }
+            .bubble { max-width: 100%; }
+
+            /* --- Timeline Mobile Adjustments --- */
+            .timeline-container::after {
+                left: 10px; /* Move line to the left */
+                margin-left: 0;
+            }
+            .timeline-item {
+                width: 100%; /* Full width for items */
+                padding-left: 40px; /* Space for the line */
+                padding-right: 0;
+            }
+            .timeline-left, .timeline-right {
+                left: 0; /* Reset horizontal positioning */
+                text-align: left; /* Align all text to the left */
+            }
+            .timeline-left::after, .timeline-right::after {
+                left: 0; /* Align all dots to the line */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <header id="hero">
+        <div class="content-box">
+            <h1>The Domino Effect in Society</h1>
+            <h3>One push away from chaos</h3>
+        </div>
+    </header>
+
+    <main>
+        <!-- INTRODUCTION -->
+        <section id="intro">
+            <div class="content-box">
+                <h2>How an Ember sparks a Forest Fire</h2>
+                <p>Even the smallest of embers burn with the brightest light. The very minute cinders that are often overlooked can eventually snowball into a ferocious Forest Fire. That is what the “Domini Effect” is in its core essence. It describes how a single event sets off a chain of related events, quite alike to a line of dominoes falling one after another.</p>
+                <p>Given India’s vast population, deep cultural diversity, and intricate socio-political fabric, the domino effect often plays a powerful role in shaping public opinion, economic trends, and policy directions.</p>
+            </div>
+        </section>
+
+        <!-- SOCIETAL DOMINO -->
+        <section id="societal">
+            <div class="content-box">
+                <h2>Let’s start with what politicians fear the most - the Societal dominoes</h2>
+                <p>Say “politician,” and the first word that flashes in every Indian’s mind is “corruption.” It’s not a secret—it’s the system’s rotten heartbeat. And yet, we’re forced to endure it, because the game is rigged and the choices aren’t great. But even patience has a breaking point and once that invisible line is crossed, the very hands once raised for votes rise instead to tear the throne down.</p>
+                <p>The Arab Spring and the French Revolution stand as living proof of this reality. What started in Tunisia with one man’s protest spread like wildfire across borders. Similarly when hunger, crushing taxes, and aristocratic arrogance pushed the masses past endurance, the people stormed the Bastille and shattered centuries of monarchy.</p>
+                <blockquote>Remember: Once the crowd rises, no king’s crown can survive its fury- no matter how iron fisted.</blockquote>
+            </div>
+        </section>
+
+        <!-- ECONOMIC DOMINO -->
+        <section id="economic">
+            <div class="content-box">
+                <h2>And that's not it - The political domino falls and takes with it the Economical Domino</h2>
+                <p>Business, at its core, runs on two fragile currencies—trust and hope. Strip them away, and economics itself collapses. Every transaction, every investment, every handshake is built on the assumption that tomorrow will honor today’s promise. But when greed and selfishness creeps in—from boardrooms to parliaments—the cracks begin to show. The world may tolerate corruption for a while, but the markets don’t forgive. Remember 2008? A single house of cards built on blind greed brought Wall Street and the global economy to its knees. That’s the real domino effect of broken trust: one reckless decision at the top, millions suffering at the bottom.</p>
+            </div>
+        </section>
+        
+        <!-- ENVIRONMENTAL DOMINO -->
+        <section id="environmental">
+            <div class="content-box">
+                <h2>Here is another Domino that starts with an E - The Environmental Domino</h2>
+                <p>The environment is the purest teacher of Karma - you give, it gives back; you exploit, it strikes back. One tree cut doesn’t cause a drought, one river polluted doesn’t cause a flood. But when greed multiplies, that is, when forests vanish, rivers choke, and air thickens - the payback is merciless. Droughts, floods, wildfires - these aren’t natural “disasters,” they’re nature’s revenge letters. One tree doesn’t change a lot, but stacked over a specific region, the local ecology is hampered, stacked over a country, the entire nation's weather is impacted, stacked over the globe and, well - Congrats, we have just realised how global warming has become a big issue.</p>
+                <blockquote>And never forget—sometimes it’s just that one last tree and that one last spark, that tips the balance, lights a fire and seals our coffin.</blockquote>
+            </div>
+        </section>
+
+        <!-- INTERLUDE -->
+        <section id="interlude">
+            <div class="content-box">
+                <div class="bubble bubble-left">
+                    <p>Quite a sad thing no? We are at a point in our lives where we are relating Childhood games with real life tragedies.</p>
+                </div>
+                <div class="bubble bubble-right">
+                    <p>That is true but that is also exactly why we are here. To Speak the Unspoken.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- HISTORY DOMINO -->
+        <section id="history">
+            <div class="content-box">
+                <h2>And what else is not spoken about as much?</h2>
+                <p style="text-align: center; max-width: 700px; margin: 0 auto 2rem auto;">Well, no need to go far or wide to show an example. The revolt of 1857 itself serves as a great example of something that is often overlooked but perfectly defines the domino effect within society.</p>
+            </div>
+            <div class="timeline-container">
+                <div class="timeline-item timeline-left">
+                    <div class="timeline-content">
+                        <h4>The Spark</h4>
+                        <p>The Revolt began when rumors spread that new Enfield rifle cartridges were greased with cow and pig fat, sacrilegious to both Hindus and Muslims.</p>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-right">
+                    <div class="timeline-content">
+                        <h4>The Mutiny</h4>
+                        <p>This led to sepoys refusing to use the rifles. The mutiny began, quickly spreading to Delhi where Bahadur Shah Zafar was declared the symbolic emperor.</p>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-left">
+                    <div class="timeline-content">
+                        <h4>The Uprising</h4>
+                        <p>It spread to key regions like Kanpur and Lucknow, gaining support from peasants, artisans, and deposed rulers, transforming a military rebellion into a widespread uprising.</p>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-right">
+                    <div class="timeline-content">
+                        <h4>The Result</h4>
+                        <p>This simple rumor about cartridges turned into a full roar, becoming India's First War of Independence and leading to the British Crown taking over from the East India Company.</p>
+                    </div>
+                </div>
+            </div>
+             <div class="timeline-conclusion content-box">
+                <p>Of course this ignition wasn’t just due to that singular rumor. Even an ember needs oxygen, fuel and flame to continue burning. For this revolt, the mixture of political, economic, socio-religious and military causes, was like cooking in a pressure cooker.</p>
+            </div>
+        </section>
+
+        <!-- PRESSURE COOKER -->
+        <section id="cooker">
+             <div class="content-box">
+                <h3>Wait a minute… a pressure cooker?</h3>
+                <p>The domino effect, for me, is best captured by a pressure cooker found in every Indian kitchen. With each unsolved problem, the pressure mounts. And when it finally can’t be held any longer, even the tiniest spark, a minor injustice or the smallest inconvenience blows the lid off, unleashing mayhem.</p>
+            </div>
+        </section>
+
+        <!-- TAKEAWAY -->
+        <section id="takeaway">
+            <div class="content-box">
+                <h2>We hear you asking, What's the takeaway?</h2>
+                <p>Well, before we leave, let it be known that the Domino effect within society is no small ordeal. A simple negative comment about a community can become a stereotype. A stereotype that will become a prejudice which will lead to Discrimination. Discrimination that will incite polarisation and polarisation that could end up with communal riots and uncountable deaths. All it takes is a single comment to blow up societal stability - just like a match stick lighting up a pile of gunpowder.</p>
+                <p>In the end, society’s complexity will never allow us to predict the exact tipping point. That’s why it’s wiser to act now and change things for the better because once the first domino falls, all others will follow no matter what.</p>
+                <blockquote>Waiting for chaos to be unleashed is not a rational choice, is it now?</blockquote>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <p>Daksh Bhatnagar</p>
+            <p>Dhruv Manshani</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Use Intersection Observer for scroll animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1 // Trigger when 10% of the element is visible
+            });
+
+            // Observe all content boxes and timeline items for animation
+            const elementsToAnimate = document.querySelectorAll('.content-box, .timeline-item');
+            elementsToAnimate.forEach(el => {
+                observer.observe(el);
+            });
+
+            // Special case for hero text fade-in on load
+            const heroContent = document.querySelector('#hero .content-box');
+            setTimeout(() => {
+                heroContent.classList.add('visible');
+            }, 500); // Small delay after page load
+        });
+    </script>
+
+</body>
+</html>
